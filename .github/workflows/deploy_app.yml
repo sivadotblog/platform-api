@@ -13,7 +13,7 @@ env:
   AZURE_WEBAPP_NAME: siva-platform-api # set this to your application's name
   WORKING_DIRECTORY: "." # set this to the path to your path of working directory inside github repository, defaults to the repository root
   PYTHON_VERSION: "3.11"
-  STARTUP_COMMAND: "python -m uvicorn platform_api.main:app --host 0.0.0.0" # set this to the startup command required to start the gunicorn server. default it is empty
+  STARTUP_COMMAND: "./startup.sh" # set this to the startup command required to start the gunicorn server. default it is empty
 
 jobs:
   build:
@@ -27,13 +27,13 @@ jobs:
         with:
           python-version: "3.10"
 
-      #- name: Create and start virtual environment
-       # run: |
-        #  python -m venv venv
-         # source venv/bin/activate
+      - name: Create and start virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
 
-      #- name: Install dependencies
-       # run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
@@ -46,7 +46,7 @@ jobs:
           name: python-app
           path: |
             release.zip
-          #  !venv/
+            !venv/
 
   deploy:
     runs-on: ubuntu-latest
@@ -60,8 +60,8 @@ jobs:
         with:
           name: python-app
 
-      # - name: Unzip artifact for deployment
-      #   run: unzip release.zip
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
 
       - uses: azure/login@v1
         with:
@@ -72,12 +72,12 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           mask-inputs: false
           # slot-name: "staging" # Optional and needed only if the settings have to be configured on the specific deployment slot
-          app-settings-json: '[{ "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "true" }]'
+          app-settings-json: '[{ "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "false" }]'
 
       - name: "Deploy to Azure Web App"
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: release.zip
+          package: ${{ env.WORKING_DIRECTORY }}
           startup-command: ${{ env.STARTUP_COMMAND }}
