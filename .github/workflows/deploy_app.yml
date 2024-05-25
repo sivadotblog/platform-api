@@ -60,16 +60,24 @@ jobs:
         with:
           name: python-app
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
+      # - name: Unzip artifact for deployment
+      #   run: unzip release.zip
 
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: azure/appservice-settings@v1
+        with:
+          app-name: "my-app"
+          mask-inputs: false
+          # slot-name: "staging" # Optional and needed only if the settings have to be configured on the specific deployment slot
+          app-settings-json: '[{ "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "true" }]'
 
       - name: "Deploy to Azure Web App"
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: release.zip
           startup-command: ${{ env.STARTUP_COMMAND }}
