@@ -69,7 +69,7 @@ jobs:
 
       - uses: azure/appservice-settings@v1
         with:
-          app-name: "my-app"
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           mask-inputs: false
           # slot-name: "staging" # Optional and needed only if the settings have to be configured on the specific deployment slot
           app-settings-json: '[{ "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "true" }]'
