@@ -72,7 +72,7 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           mask-inputs: false
           # slot-name: "staging" # Optional and needed only if the settings have to be configured on the specific deployment slot
-          app-settings-json: '[{ "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "false" },{"name":"PIP_INDEX_URL","value":"https://your-custom-index-url.com"}]'
+          app-settings-json: '[{ "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "true" },{"name":"PIP_INDEX_URL","value":"https://your-custom-index-url.com"}]'
 
       - name: "Deploy to Azure Web App"
         uses: azure/webapps-deploy@v2
