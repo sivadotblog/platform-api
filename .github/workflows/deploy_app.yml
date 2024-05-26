@@ -13,7 +13,7 @@ env:
   AZURE_WEBAPP_NAME: siva-platform-api # set this to your application's name
   WORKING_DIRECTORY: "." # set this to the path to your path of working directory inside github repository, defaults to the repository root
   PYTHON_VERSION: "3.11"
-  STARTUP_COMMAND: "source venv/bin/activate; python -m uvicorn platform_api.main:app --host 0.0.0.0" # set this to the startup command required to start the gunicorn server. default it is empty
+  STARTUP_COMMAND: "source antenv/bin/activate; python -m uvicorn platform_api.main:app --host 0.0.0.0" # set this to the startup command required to start the gunicorn server. default it is empty
 
 jobs:
   build:
@@ -29,8 +29,8 @@ jobs:
 
       - name: Create and start virtual environment
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          python -m venv antenv
+          source antenv/bin/activate
 
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -46,7 +46,7 @@ jobs:
           name: python-app
           path: |
             release.zip
-          #  !venv/
+            !antenv/
 
   deploy:
     runs-on: ubuntu-latest
