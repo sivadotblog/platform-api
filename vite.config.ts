@@ -9,6 +9,7 @@ export default defineConfig(() => {
     server: {
       port: 3000,
     },
+    build: { outDir: 'dist', },    
     resolve: {
       alias: {
         app: resolve(__dirname, "src", "app"),
