@@ -5,9 +5,7 @@
 name: Build and deploy Python app to Azure Web App - aptithon
 
 on:
-  push:
-    branches:
-      - react-app
+
   workflow_dispatch:
 env:
   AZURE_WEBAPP_NAME: siva-platform-api # set this to your application's name
